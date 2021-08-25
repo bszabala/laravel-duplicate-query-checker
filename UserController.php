@@ -6,9 +6,16 @@ use App\Models\User;
 
 class UserController extends Controller
 {
-	$users = User::select('Id', 'FirstName', 'LastName', 'DateCreated')->where('');
-	$duplicates = ;
-	$uniques =;
+	$duplicates = [];
+	$uniques = [];
 
-	return ['duplicateUsers' => $duplicates, 'uniqueUsers' => $uniques];
+	$users = User::select('Id', 'FirstName', 'LastName', 'DateCreated')->get();
+
+	$uniques = $users->unique(['FirstName', 'LastName'])->values()->all();
+	$duplicates = $users->duplicates(['FirstName', 'LastName']);
+
+	return [
+		'duplicateUsers' => $duplicates,
+		'uniqueUsers' 	 => $uniques
+	];
 }
